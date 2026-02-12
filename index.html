@@ -73,7 +73,7 @@
 
     h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-size: clamp(2.5rem, 7.5vw, 4.25rem);
       color: #5c2a3a;
       margin: 0 0 1.5rem;
       text-shadow:
@@ -89,12 +89,11 @@
     }
 
     .gif-placeholder {
-      width: min(320px, 90vw);
-      height: 200px;
+      width: min(420px, 92vw);
       background: rgba(255, 255, 255, 0.5);
       border-radius: 16px;
       margin-bottom: 2.5rem;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       color: #5c2a3a;
@@ -103,12 +102,13 @@
       box-shadow:
         0 4px 12px rgba(92, 42, 58, 0.08),
         inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      overflow: hidden;
     }
 
     .gif-placeholder img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+      display: block;
+      width: 100%;
+      height: auto;
       border-radius: 14px;
     }
 
@@ -145,32 +145,32 @@
     }
 
     .btn-yes {
-      font-size: 1.35rem;
-      padding: 1rem 2.2rem;
-      transform: scale(var(--yes-scale, 1.3));
+      font-size: 1.15rem;
+      padding: 0.9rem 1.9rem;
+      transform: scale(var(--yes-scale, 1));
       transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background 0.2s ease, color 0.2s ease;
     }
 
     .btn-yes:hover {
-      transform: scale(var(--yes-scale, 1.3)) scale(1.05);
+      transform: scale(var(--yes-scale, 1)) scale(1.05);
     }
 
     .btn-yes.green {
-      background: linear-gradient(145deg, #2d6a4f, #1b4332);
+      background: linear-gradient(145deg, #70AE6E, #5a9258);
       color: white;
       box-shadow:
         0 2px 4px rgba(0, 0, 0, 0.15),
-        0 6px 20px rgba(45, 106, 79, 0.35),
+        0 6px 20px rgba(112, 174, 110, 0.35),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .btn-yes.green:hover {
-      transform: scale(var(--yes-scale, 1.3)) scale(1.05);
+      transform: scale(var(--yes-scale, 1)) scale(1.05);
     }
 
     .btn-no {
-      font-size: 1rem;
-      padding: 0.75rem 1.6rem;
+      font-size: 1.15rem;
+      padding: 0.9rem 1.9rem;
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
     }
 
@@ -206,7 +206,7 @@
 
     .yay-title {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-size: clamp(3rem, 9vw, 5rem);
       color: #5c2a3a;
       margin: 0 0 1.5rem;
       text-shadow:
@@ -215,11 +215,10 @@
     }
 
     .yay-gif {
-      width: min(320px, 90vw);
-      height: 200px;
+      width: min(420px, 92vw);
       background: rgba(255, 255, 255, 0.5);
       border-radius: 16px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       color: #5c2a3a;
@@ -228,12 +227,13 @@
       box-shadow:
         0 4px 12px rgba(92, 42, 58, 0.08),
         inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      overflow: hidden;
     }
 
     .yay-gif img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+      display: block;
+      width: 100%;
+      height: auto;
       border-radius: 14px;
     }
 
@@ -292,15 +292,15 @@
       const askWrap = document.getElementById('askWrap');
       const yayWrap = document.getElementById('yayWrap');
 
-      const YES_BASE_SCALE = 1.3;
+      const YES_BASE_SCALE = 1;
       let noClickCount = 0;
       let directionIndex = 0;
 
       function getRandomOffset() {
         const angle = (directionIndex % 8) * 45 + Math.random() * 25;
         directionIndex++;
-        var minDist = 35 + noClickCount * 28;
-        var maxDist = 55 + noClickCount * 35;
+        var minDist = 70 + noClickCount * 50;
+        var maxDist = 120 + noClickCount * 65;
         const dist = minDist + Math.random() * (maxDist - minDist);
         const rad = (angle * Math.PI) / 180;
         return {
@@ -321,7 +321,7 @@
       }
 
       function overlaps(a, b, padding) {
-        padding = padding || 15;
+        padding = padding || 20;
         return !(
           a.left + a.width + padding < b.left ||
           b.left + b.width + padding < a.left ||
@@ -336,10 +336,10 @@
         const yesRect = getRect(btnYes);
         const noWidth = btnNo.offsetWidth;
         const noHeight = btnNo.offsetHeight;
-        let bestDx = 50;
+        let bestDx = 100;
         let bestDy = 0;
 
-        for (let i = 0; i < 40; i++) {
+        for (let i = 0; i < 50; i++) {
           const off = getRandomOffset();
           const noLeft = wrapRect.width / 2 + off.x - noWidth / 2;
           const noTop = wrapRect.height / 2 + off.y - noHeight / 2;
@@ -363,10 +363,10 @@
       }
 
       function applySizes() {
-        var yesScale = YES_BASE_SCALE * Math.pow(1.5, noClickCount);
+        var yesScale = YES_BASE_SCALE * Math.pow(1.3, noClickCount);
         yesScale = Math.min(yesScale, 15);
         btnYes.style.setProperty('--yes-scale', String(yesScale));
-        btnYes.classList.toggle('green', noClickCount >= 1);
+        btnYes.classList.toggle('green', noClickCount >= 5);
       }
 
       btnYes.addEventListener('click', function () {
@@ -377,8 +377,8 @@
 
       btnNo.addEventListener('click', function () {
         noClickCount++;
-        positionNoButton();
         applySizes();
+        positionNoButton();
       });
 
       applySizes();
