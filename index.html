@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will you be my valentine?</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Quicksand:wght@500;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #ffb7c5 0%, #ff9aab 25%, #ff85a2 50%, #ff6b8a 75%, #ff4d6d 100%);
+      position: relative;
+    }
+
+    /* Floating hearts background */
+    .hearts-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 1.5rem;
+      opacity: 0.35;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .heart:nth-child(1) { left: 5%; top: 10%; animation-delay: 0s; }
+    .heart:nth-child(2) { left: 15%; top: 70%; animation-delay: 1s; font-size: 1.2rem; }
+    .heart:nth-child(3) { left: 25%; top: 30%; animation-delay: 2s; font-size: 1.8rem; }
+    .heart:nth-child(4) { left: 45%; top: 85%; animation-delay: 0.5s; }
+    .heart:nth-child(5) { left: 55%; top: 15%; animation-delay: 1.5s; font-size: 1.3rem; }
+    .heart:nth-child(6) { left: 70%; top: 50%; animation-delay: 2.5s; }
+    .heart:nth-child(7) { left: 85%; top: 25%; animation-delay: 0.8s; font-size: 1.6rem; }
+    .heart:nth-child(8) { left: 90%; top: 75%; animation-delay: 1.2s; }
+    .heart:nth-child(9) { left: 35%; top: 45%; animation-delay: 3s; font-size: 1.1rem; }
+    .heart:nth-child(10) { left: 75%; top: 90%; animation-delay: 2s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(5deg); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      color: #5c2a3a;
+      margin: 0 0 1.5rem;
+      text-shadow:
+        0 2px 4px rgba(92, 42, 58, 0.12),
+        0 4px 12px rgba(92, 42, 58, 0.08),
+        0 0 40px rgba(255, 255, 255, 0.15);
+      animation: titleGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { opacity: 1; text-shadow: 0 2px 4px rgba(92, 42, 58, 0.12), 0 4px 12px rgba(92, 42, 58, 0.08), 0 0 40px rgba(255, 255, 255, 0.15); }
+      50% { opacity: 0.95; text-shadow: 0 2px 6px rgba(92, 42, 58, 0.18), 0 6px 18px rgba(92, 42, 58, 0.12), 0 0 50px rgba(255, 255, 255, 0.25); }
+    }
+
+    .gif-placeholder {
+      width: min(320px, 90vw);
+      height: 200px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 16px;
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #5c2a3a;
+      font-size: 1rem;
+      border: 1px solid rgba(92, 42, 58, 0.15);
+      box-shadow:
+        0 4px 12px rgba(92, 42, 58, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    .gif-placeholder img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 14px;
+    }
+
+    .buttons-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      min-height: 120px;
+      min-width: 280px;
+    }
+
+    .btn {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.25s ease;
+      flex-shrink: 0;
+      position: absolute;
+    }
+
+    .btn:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-yes {
+      background: linear-gradient(145deg, #e63946, #c1121f);
+      color: white;
+      font-size: 1.35rem;
+      padding: 1rem 2.2rem;
+      left: 50%;
+      top: 50%;
+      transform: translate(-120%, -50%) scale(var(--yes-scale, 1.3));
+      box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.15),
+        0 6px 20px rgba(198, 18, 31, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-yes:hover {
+      transform: translate(-120%, -50%) scale(var(--yes-scale, 1.3)) scale(1.05);
+    }
+
+    .btn-yes.green {
+      background: linear-gradient(145deg, #2d6a4f, #1b4332);
+      box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.15),
+        0 6px 20px rgba(45, 106, 79, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-yes.green:hover {
+      transform: translate(-120%, -50%) scale(var(--yes-scale, 1.3)) scale(1.05);
+    }
+
+    .btn-no {
+      background: linear-gradient(145deg, #6c757d, #495057);
+      color: white;
+      font-size: 1rem;
+      padding: 0.75rem 1.6rem;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) translate(var(--no-dx), var(--no-dy)) scale(var(--no-scale, 1));
+      box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        0 6px 16px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+    }
+
+    .btn-no:hover {
+      transform: translate(-50%, -50%) translate(var(--no-dx), var(--no-dy)) scale(var(--no-scale, 1)) scale(1.05);
+      box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        0 10px 24px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .buttons-wrap.hidden {
+      display: none;
+    }
+
+    .yay-wrap {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: popIn 0.5s ease;
+    }
+
+    .yay-wrap.visible {
+      display: flex;
+    }
+
+    .yay-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      color: #5c2a3a;
+      margin: 0 0 1.5rem;
+      text-shadow:
+        0 2px 4px rgba(92, 42, 58, 0.12),
+        0 6px 20px rgba(92, 42, 58, 0.15);
+    }
+
+    .yay-gif {
+      width: min(320px, 90vw);
+      height: 200px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #5c2a3a;
+      font-size: 1rem;
+      border: 1px solid rgba(92, 42, 58, 0.15);
+      box-shadow:
+        0 4px 12px rgba(92, 42, 58, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    .yay-gif img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 14px;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts-bg" aria-hidden="true">
+    <span class="heart">❤️</span>
+    <span class="heart">💕</span>
+    <span class="heart">❤️</span>
+    <span class="heart">💗</span>
+    <span class="heart">❤️</span>
+    <span class="heart">💕</span>
+    <span class="heart">💗</span>
+    <span class="heart">❤️</span>
+    <span class="heart">💕</span>
+    <span class="heart">💗</span>
+  </div>
+
+  <div class="container">
+    <h1>Will you be my valentine?</h1>
+
+    <div class="gif-placeholder" id="mainGif">
+      <!-- Replace with your GIF: <img src="your-gif-url.gif" alt=""> -->
+      Add your GIF here
+    </div>
+
+    <div class="buttons-wrap" id="buttonsWrap">
+      <button type="button" class="btn btn-yes" id="btnYes">YES</button>
+      <button type="button" class="btn btn-no" id="btnNo">NO</button>
+    </div>
+
+    <div class="yay-wrap" id="yayWrap">
+      <h2 class="yay-title">YAY!</h2>
+      <div class="yay-gif" id="yayGif">
+        <!-- Replace with your GIF: <img src="your-yay-gif-url.gif" alt=""> -->
+        Add your YAY GIF here
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const btnYes = document.getElementById('btnYes');
+      const btnNo = document.getElementById('btnNo');
+      const buttonsWrap = document.getElementById('buttonsWrap');
+      const yayWrap = document.getElementById('yayWrap');
+
+      const YES_BASE_SCALE = 1.3;
+      let noClickCount = 0;
+      let directionIndex = 0;
+
+      function getRandomOffset() {
+        const angle = (directionIndex % 8) * 45 + Math.random() * 25;
+        directionIndex++;
+        const dist = 90 + Math.random() * 50;
+        const rad = (angle * Math.PI) / 180;
+        return {
+          x: Math.cos(rad) * dist,
+          y: Math.sin(rad) * dist,
+        };
+      }
+
+      function getRect(el) {
+        const r = el.getBoundingClientRect();
+        const wrap = buttonsWrap.getBoundingClientRect();
+        return {
+          left: r.left - wrap.left,
+          top: r.top - wrap.top,
+          width: r.width,
+          height: r.height,
+        };
+      }
+
+      function overlaps(a, b, padding) {
+        padding = padding || 15;
+        return !(
+          a.left + a.width + padding < b.left ||
+          b.left + b.width + padding < a.left ||
+          a.top + a.height + padding < b.top ||
+          b.top + b.height + padding < a.top
+        );
+      }
+
+      function positionNoButton() {
+        const wrapRect = buttonsWrap.getBoundingClientRect();
+        const yesRect = getRect(btnYes);
+        const noWidth = btnNo.offsetWidth;
+        const noHeight = btnNo.offsetHeight;
+        const noScale = noClickCount >= 5 ? 0.7 : 1;
+        const scaledNoW = noWidth * noScale;
+        const scaledNoH = noHeight * noScale;
+        let bestDx = 80;
+        let bestDy = 0;
+
+        for (let i = 0; i < 40; i++) {
+          const off = getRandomOffset();
+          const noLeft = wrapRect.width / 2 + off.x - scaledNoW / 2;
+          const noTop = wrapRect.height / 2 + off.y - scaledNoH / 2;
+          const proposed = {
+            left: noLeft,
+            top: noTop,
+            width: scaledNoW,
+            height: scaledNoH,
+          };
+          if (!overlaps(proposed, yesRect)) {
+            bestDx = off.x;
+            bestDy = off.y;
+            break;
+          }
+          bestDx = off.x;
+          bestDy = off.y;
+        }
+
+        btnNo.style.setProperty('--no-dx', bestDx + 'px');
+        btnNo.style.setProperty('--no-dy', bestDy + 'px');
+      }
+
+      function applySizes() {
+        const noScale = noClickCount >= 5 ? 0.7 : 1;
+        btnNo.style.setProperty('--no-scale', String(noScale));
+        const yesScale = Math.min(YES_BASE_SCALE + noClickCount * 0.14, 2.1);
+        btnYes.style.setProperty('--yes-scale', String(yesScale));
+        btnYes.classList.toggle('green', noClickCount >= 6);
+      }
+
+      btnYes.addEventListener('click', function () {
+        buttonsWrap.classList.add('hidden');
+        yayWrap.classList.add('visible');
+      });
+
+      btnNo.addEventListener('click', function () {
+        noClickCount++;
+        if (noClickCount >= 5) {
+          btnNo.style.fontSize = '0.85rem';
+          btnNo.style.padding = '0.55rem 1.2rem';
+        }
+        positionNoButton();
+        applySizes();
+      });
+
+      positionNoButton();
+      applySizes();
+    })();
+  </script>
+</body>
+</html>
