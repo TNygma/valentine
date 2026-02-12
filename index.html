@@ -114,20 +114,22 @@
 
     h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(1.75rem, 6vw, 4.25rem);
+      font-size: clamp(1.65rem, 5.5vw, 4.25rem);
       color: #5c2a3a;
-      margin: 0 0 0.75rem;
+      margin: 0 0 0.65rem;
       text-shadow:
         0 2px 4px rgba(92, 42, 58, 0.12),
         0 4px 12px rgba(92, 42, 58, 0.08),
         0 0 40px rgba(255, 255, 255, 0.15);
       animation: titleGlow 4s ease-in-out infinite;
-      line-height: 1.2;
+      line-height: 1.15;
+      padding: 0 0.5rem;
     }
 
     @media (min-width: 640px) {
       h1 {
         margin: 0 0 1.5rem;
+        padding: 0;
       }
     }
 
@@ -137,10 +139,10 @@
     }
 
     .gif-placeholder {
-      width: min(280px, 75vw);
+      width: min(260px, 70vw);
       background: rgba(255, 255, 255, 0.5);
       border-radius: 16px;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -172,7 +174,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 2rem;
+      gap: 1.5rem;
       min-height: 80px;
       min-width: 280px;
     }
@@ -218,11 +220,13 @@
       padding: 0.85rem 1.7rem;
       transform: scale(var(--yes-scale, 1));
       transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background 0.2s ease, color 0.2s ease;
+      min-width: 180px;
     }
 
     @media (min-width: 640px) {
       .btn-yes {
         padding: 0.9rem 1.9rem;
+        min-width: 200px;
       }
     }
 
@@ -246,7 +250,7 @@
     .btn-no {
       font-size: clamp(1rem, 3vw, 1.15rem);
       padding: 0.85rem 1.7rem;
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, font-size 0.3s ease, padding 0.3s ease;
       min-width: 180px;
       white-space: nowrap;
     }
@@ -255,6 +259,17 @@
       .btn-no {
         padding: 0.9rem 1.9rem;
         min-width: 200px;
+      }
+    }
+
+    .btn-no.smaller {
+      font-size: clamp(0.85rem, 2.5vw, 1rem);
+      padding: 0.7rem 1.4rem;
+    }
+
+    @media (min-width: 640px) {
+      .btn-no.smaller {
+        padding: 0.75rem 1.5rem;
       }
     }
 
@@ -299,16 +314,16 @@
     }
 
     .yay-message {
-      font-size: clamp(0.95rem, 3.5vw, 1.25rem);
+      font-size: clamp(0.9rem, 3.2vw, 1.25rem);
       color: #5c2a3a;
-      margin: 0 0 1.5rem;
+      margin: 0 0 1.25rem;
       max-width: 85vw;
-      line-height: 1.5;
+      line-height: 1.4;
       padding: 0 1rem;
     }
 
     .yay-gif {
-      width: min(280px, 75vw);
+      width: min(260px, 70vw);
       background: rgba(255, 255, 255, 0.5);
       border-radius: 16px;
       display: inline-flex;
@@ -405,7 +420,7 @@
 
     <div class="yay-wrap" id="yayWrap">
       <h2 class="yay-title">YAAAAY!✨😘</h2>
-      <p class="yay-message">I'm so happy you said yes! Confetti would be falling if this page had a budget.</p>
+      <p class="yay-message">I'm so happy you said yes!🥰 Confetti would be falling if this page had a budget.🎉😝</p>
       <div class="yay-gif" id="yayGif">
         <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmp3azJrZHgwZnB0N2Z0cHFpcm5naGQwbjNkNXZvbXlmMDNlYjk4byZlcD12MV9naWZzX3NlYXJjaCZjdD1n/7zfweQR6bUvu4JF4DW/giphy.gif" alt="">
       </div>
@@ -570,6 +585,7 @@
         const yesScale = getYesScale();
         btnYes.style.setProperty('--yes-scale', String(yesScale));
         btnYes.classList.toggle('green', noClickCount >= 5);
+        btnNo.classList.toggle('smaller', noClickCount >= 3);
       }
 
       function updateNoButtonText() {
