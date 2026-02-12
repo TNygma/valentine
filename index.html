@@ -285,63 +285,6 @@
         transform: scale(1);
       }
     }
-
-    /* Clapperboard effect on YAY screen – drops from above viewport */
-    .clapperboard-wrap {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      pointer-events: none;
-      transform: translateY(-120px);
-      transition: none;
-    }
-
-    .clapperboard-wrap.visible {
-      animation: clapperDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-    }
-
-    .clapperboard-bar {
-      height: 36px;
-      min-height: 36px;
-      background: repeating-linear-gradient(
-        -45deg,
-        #0d0d0d,
-        #0d0d0d 14px,
-        #f5f5f5 14px,
-        #f5f5f5 28px
-      );
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .clapperboard-bar::after {
-      content: '♥ ACTION! ♥';
-      font-family: 'Playfair Display', serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #fff;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-      letter-spacing: 0.1em;
-    }
-
-    @keyframes clapperDown {
-      0% {
-        transform: translateY(-120px);
-      }
-      70% {
-        transform: translateY(8px);
-      }
-      85% {
-        transform: translateY(-3px);
-      }
-      100% {
-        transform: translateY(0);
-      }
-    }
   </style>
 </head>
 <body>
@@ -386,10 +329,6 @@
     <span class="heart">💗</span>
   </div>
 
-  <div class="clapperboard-wrap" id="clapperboardWrap" aria-hidden="true">
-    <div class="clapperboard-bar"></div>
-  </div>
-
   <div class="container">
     <div class="ask-wrap" id="askWrap">
       <h1>Will you be my valentine?</h1>
@@ -418,7 +357,6 @@
       const buttonsWrap = document.getElementById('buttonsWrap');
       const askWrap = document.getElementById('askWrap');
       const yayWrap = document.getElementById('yayWrap');
-      const clapperboardWrap = document.getElementById('clapperboardWrap');
 
       let noClickCount = 0;
       let directionIndex = 0;
@@ -539,7 +477,8 @@
       const YES_GROWTH_START_AFTER_CLICKS = 2;
       const YES_GROWTH_NEAR_FULL_AT_CLICKS = 10;
       // YES_MAX_SCALE = cap on the YES button's CSS transform scale() (it won't grow beyond this many times its base size)
-      const YES_MAX_SCALE = 20;
+      const YES_MAX_SCALE = 12;
+      // YES_GROWTH_EASE_FACTOR = steepness of the growth curve (1 - e^(-k*progress)). Higher = more growth in early clicks, lower = more spread out.
       const YES_GROWTH_EASE_FACTOR = 3;
 
       function getYesScale() {
@@ -559,15 +498,6 @@
         askWrap.classList.add('hidden');
         buttonsWrap.classList.add('hidden');
         yayWrap.classList.add('visible');
-        if (clapperboardWrap) {
-          clapperboardWrap.classList.remove('visible');
-          clapperboardWrap.style.animation = 'none';
-          clapperboardWrap.offsetHeight;
-          clapperboardWrap.style.animation = '';
-          requestAnimationFrame(function () {
-            clapperboardWrap.classList.add('visible');
-          });
-        }
       });
 
       btnNo.addEventListener('click', function () {
