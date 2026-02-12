@@ -32,24 +32,41 @@
     .heart {
       position: absolute;
       font-size: 1.5rem;
-      opacity: 0.35;
-      animation: float 8s ease-in-out infinite;
+      opacity: 0.4;
+      animation: float 6s ease-in-out infinite;
     }
 
-    .heart:nth-child(1) { left: 5%; top: 10%; animation-delay: 0s; }
-    .heart:nth-child(2) { left: 15%; top: 70%; animation-delay: 1s; font-size: 1.2rem; }
-    .heart:nth-child(3) { left: 25%; top: 30%; animation-delay: 2s; font-size: 1.8rem; }
-    .heart:nth-child(4) { left: 45%; top: 85%; animation-delay: 0.5s; }
-    .heart:nth-child(5) { left: 55%; top: 15%; animation-delay: 1.5s; font-size: 1.3rem; }
-    .heart:nth-child(6) { left: 70%; top: 50%; animation-delay: 2.5s; }
-    .heart:nth-child(7) { left: 85%; top: 25%; animation-delay: 0.8s; font-size: 1.6rem; }
-    .heart:nth-child(8) { left: 90%; top: 75%; animation-delay: 1.2s; }
-    .heart:nth-child(9) { left: 35%; top: 45%; animation-delay: 3s; font-size: 1.1rem; }
-    .heart:nth-child(10) { left: 75%; top: 90%; animation-delay: 2s; }
+    .heart:nth-child(1) { left: 3%; top: 8%; animation-delay: 0s; font-size: 1.2rem; }
+    .heart:nth-child(2) { left: 12%; top: 65%; animation-delay: 0.8s; font-size: 1.6rem; }
+    .heart:nth-child(3) { left: 22%; top: 28%; animation-delay: 1.6s; font-size: 1.1rem; }
+    .heart:nth-child(4) { left: 38%; top: 82%; animation-delay: 0.3s; font-size: 1.8rem; }
+    .heart:nth-child(5) { left: 48%; top: 12%; animation-delay: 2.2s; font-size: 1.3rem; }
+    .heart:nth-child(6) { left: 58%; top: 55%; animation-delay: 0.6s; font-size: 1.4rem; }
+    .heart:nth-child(7) { left: 68%; top: 35%; animation-delay: 1.9s; font-size: 1.5rem; }
+    .heart:nth-child(8) { left: 78%; top: 88%; animation-delay: 1.1s; font-size: 1.2rem; }
+    .heart:nth-child(9) { left: 88%; top: 22%; animation-delay: 2.5s; font-size: 1.7rem; }
+    .heart:nth-child(10) { left: 92%; top: 72%; animation-delay: 0.4s; font-size: 1.1rem; }
+    .heart:nth-child(11) { left: 8%; top: 42%; animation-delay: 1.4s; font-size: 1.5rem; }
+    .heart:nth-child(12) { left: 18%; top: 78%; animation-delay: 2.8s; font-size: 1.3rem; }
+    .heart:nth-child(13) { left: 32%; top: 18%; animation-delay: 0.2s; font-size: 1.6rem; }
+    .heart:nth-child(14) { left: 42%; top: 52%; animation-delay: 1.7s; font-size: 1.2rem; }
+    .heart:nth-child(15) { left: 52%; top: 92%; animation-delay: 2.3s; font-size: 1.8rem; }
+    .heart:nth-child(16) { left: 62%; top: 8%; animation-delay: 0.9s; font-size: 1.1rem; }
+    .heart:nth-child(17) { left: 72%; top: 62%; animation-delay: 1.3s; font-size: 1.4rem; }
+    .heart:nth-child(18) { left: 82%; top: 38%; animation-delay: 2.6s; font-size: 1.5rem; }
+    .heart:nth-child(19) { left: 5%; top: 92%; animation-delay: 2s; font-size: 1.3rem; }
+    .heart:nth-child(20) { left: 28%; top: 5%; animation-delay: 0.7s; font-size: 1.7rem; }
+    .heart:nth-child(21) { left: 95%; top: 48%; animation-delay: 1.5s; font-size: 1.2rem; }
+    .heart:nth-child(22) { left: 45%; top: 68%; animation-delay: 2.1s; font-size: 1.4rem; }
+    .heart:nth-child(23) { left: 15%; top: 18%; animation-delay: 0.5s; font-size: 1.6rem; }
+    .heart:nth-child(24) { left: 85%; top: 58%; animation-delay: 2.4s; font-size: 1.1rem; }
+    .heart:nth-child(25) { left: 55%; top: 78%; animation-delay: 1.2s; font-size: 1.5rem; }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-15px) rotate(5deg); }
+      0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+      25% { transform: translateY(-28px) translateX(8px) rotate(-6deg); }
+      50% { transform: translateY(-12px) translateX(-6px) rotate(8deg); }
+      75% { transform: translateY(-32px) translateX(-4px) rotate(4deg); }
     }
 
     .container {
@@ -117,7 +134,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 2.5rem;
+      gap: 3.25rem;
       min-height: 80px;
       min-width: 280px;
     }
@@ -253,20 +270,102 @@
         transform: scale(1);
       }
     }
+
+    /* Clapperboard effect on YAY screen – top of viewport */
+    .clapperboard-wrap {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-100%);
+      transition: none;
+    }
+
+    .clapperboard-wrap.visible {
+      opacity: 1;
+      transform: translateY(0);
+      animation: clapperDown 0.35s ease-out forwards;
+    }
+
+    .clapperboard-bar {
+      height: 28px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #1a1a1a,
+        #1a1a1a 12px,
+        #fff 12px,
+        #fff 24px
+      );
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clapperboard-bar::after {
+      content: '♥ ACTION! ♥';
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+      letter-spacing: 0.08em;
+    }
+
+    @keyframes clapperDown {
+      0% {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      70% {
+        transform: translateY(4px);
+        opacity: 1;
+      }
+      85% {
+        transform: translateY(-2px);
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="hearts-bg" aria-hidden="true">
     <span class="heart">❤️</span>
     <span class="heart">💕</span>
-    <span class="heart">❤️</span>
     <span class="heart">💗</span>
+    <span class="heart">💖</span>
+    <span class="heart">💘</span>
+    <span class="heart">💝</span>
+    <span class="heart">💞</span>
     <span class="heart">❤️</span>
     <span class="heart">💕</span>
     <span class="heart">💗</span>
+    <span class="heart">💖</span>
+    <span class="heart">💘</span>
+    <span class="heart">💝</span>
+    <span class="heart">💞</span>
     <span class="heart">❤️</span>
     <span class="heart">💕</span>
     <span class="heart">💗</span>
+    <span class="heart">💖</span>
+    <span class="heart">💘</span>
+    <span class="heart">💝</span>
+    <span class="heart">💞</span>
+    <span class="heart">❤️</span>
+    <span class="heart">💕</span>
+    <span class="heart">💗</span>
+    <span class="heart">💖</span>
+    <span class="heart">💘</span>
+  </div>
+
+  <div class="clapperboard-wrap" id="clapperboardWrap" aria-hidden="true">
+    <div class="clapperboard-bar"></div>
   </div>
 
   <div class="container">
@@ -297,12 +396,19 @@
       const buttonsWrap = document.getElementById('buttonsWrap');
       const askWrap = document.getElementById('askWrap');
       const yayWrap = document.getElementById('yayWrap');
+      const clapperboardWrap = document.getElementById('clapperboardWrap');
 
       let noClickCount = 0;
       let directionIndex = 0;
 
       function getRandomOffset() {
-        const angle = (directionIndex % 8) * 45 + Math.random() * 25;
+        let angle;
+        if (noClickCount >= 4) {
+          // From 5th click onward, try upper screen first (270°), then spread
+          angle = (270 + (directionIndex % 8) * 45 + Math.random() * 18) % 360;
+        } else {
+          angle = (directionIndex % 8) * 45 + Math.random() * 25;
+        }
         directionIndex++;
         var minDist = 70 + noClickCount * 50;
         var maxDist = 120 + noClickCount * 65;
@@ -326,7 +432,7 @@
       }
 
       function overlaps(a, b, padding) {
-        padding = padding || 20;
+        padding = padding || 28;
         return !(
           a.left + a.width + padding < b.left ||
           b.left + b.width + padding < a.left ||
@@ -372,10 +478,10 @@
         const yesRect = getRect(btnYes);
         const noWidth = btnNo.offsetWidth;
         const noHeight = btnNo.offsetHeight;
-        let bestDx = 100;
-        let bestDy = 0;
+        let bestDx = null;
+        let bestDy = null;
 
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 80; i++) {
           let off = getRandomOffset();
           off = clampOffsetToViewport(off.x, off.y, noWidth, noHeight);
           const noLeft = wrapRect.width / 2 + off.x - noWidth / 2;
@@ -391,8 +497,15 @@
             bestDy = off.y;
             break;
           }
-          bestDx = off.x;
-          bestDy = off.y;
+        }
+
+        if (bestDx === null || bestDy === null) {
+          var fallbackDist = 150 + noClickCount * 40;
+          bestDx = 0;
+          bestDy = -fallbackDist;
+          var fallback = clampOffsetToViewport(bestDx, bestDy, noWidth, noHeight);
+          bestDx = fallback.x;
+          bestDy = fallback.y;
         }
 
         const clamped = clampOffsetToViewport(bestDx, bestDy, noWidth, noHeight);
@@ -403,7 +516,8 @@
       // YES growth: configurable curve (no growth first 2 clicks, then diminishing returns)
       const YES_GROWTH_START_AFTER_CLICKS = 2;
       const YES_GROWTH_NEAR_FULL_AT_CLICKS = 10;
-      const YES_MAX_SCALE = 12;
+      // YES_MAX_SCALE = cap on the YES button's CSS transform scale() (it won't grow beyond this many times its base size)
+      const YES_MAX_SCALE = 20;
       const YES_GROWTH_EASE_FACTOR = 3;
 
       function getYesScale() {
@@ -423,6 +537,7 @@
         askWrap.classList.add('hidden');
         buttonsWrap.classList.add('hidden');
         yayWrap.classList.add('visible');
+        if (clapperboardWrap) clapperboardWrap.classList.add('visible');
       });
 
       btnNo.addEventListener('click', function () {
