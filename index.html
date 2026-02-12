@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Will you be my valentine?</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Quicksand:wght@500;700&display=swap');
@@ -14,7 +14,8 @@
     body {
       margin: 0;
       min-height: 100vh;
-      overflow-x: hidden;
+      height: 100vh;
+      overflow: hidden;
       font-family: 'Quicksand', sans-serif;
       background: linear-gradient(135deg, #ffb7c5 0%, #ff9aab 25%, #ff85a2 50%, #ff6b8a 75%, #ff4d6d 100%);
       position: relative;
@@ -88,12 +89,20 @@
       position: relative;
       z-index: 1;
       min-height: 100vh;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
       text-align: center;
+      overflow: hidden;
+    }
+
+    @media (min-width: 640px) {
+      .container {
+        padding: max(2rem, env(safe-area-inset-top)) max(2rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(2rem, env(safe-area-inset-left));
+      }
     }
 
     .ask-wrap {
@@ -149,9 +158,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 3.25rem;
+      gap: 2rem;
       min-height: 80px;
       min-width: 280px;
+    }
+
+    @media (min-width: 640px) {
+      .buttons-wrap {
+        gap: 3.25rem;
+      }
     }
 
     .buttons-no-spacer {
@@ -176,6 +191,8 @@
         0 4px 12px rgba(92, 42, 58, 0.12),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(92, 42, 58, 0.2);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .btn:hover {
@@ -183,10 +200,16 @@
     }
 
     .btn-yes {
-      font-size: 1.15rem;
-      padding: 0.9rem 1.9rem;
+      font-size: clamp(1rem, 3vw, 1.15rem);
+      padding: 0.85rem 1.7rem;
       transform: scale(var(--yes-scale, 1));
       transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    @media (min-width: 640px) {
+      .btn-yes {
+        padding: 0.9rem 1.9rem;
+      }
     }
 
     .btn-yes:hover {
@@ -207,9 +230,15 @@
     }
 
     .btn-no {
-      font-size: 1.15rem;
-      padding: 0.9rem 1.9rem;
+      font-size: clamp(1rem, 3vw, 1.15rem);
+      padding: 0.85rem 1.7rem;
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+    }
+
+    @media (min-width: 640px) {
+      .btn-no {
+        padding: 0.9rem 1.9rem;
+      }
     }
 
     .btn-no.running {
@@ -361,6 +390,22 @@
       let noClickCount = 0;
       let directionIndex = 0;
 
+      // Array of messages for the NO button
+      const noMessages = [
+        "NO", // Initial text (0 clicks)
+        "Hmm… maybe not",
+        "Are you sure?",
+        "Do you really want to?",
+        "Pretty please… not",
+        "Hehe, still no",
+        "Think again 😏",
+        "Oops, nope!",
+        "Not today!",
+        "Try later 😉",
+        "Nooope",
+        "Keep guessing" // This stays for all subsequent clicks
+      ];
+
       function getRandomOffset() {
         let angle;
         if (noClickCount >= 4) {
@@ -494,6 +539,11 @@
         btnYes.classList.toggle('green', noClickCount >= 5);
       }
 
+      function updateNoButtonText() {
+        const messageIndex = Math.min(noClickCount, noMessages.length - 1);
+        btnNo.textContent = noMessages[messageIndex];
+      }
+
       btnYes.addEventListener('click', function () {
         askWrap.classList.add('hidden');
         buttonsWrap.classList.add('hidden');
@@ -502,6 +552,7 @@
 
       btnNo.addEventListener('click', function () {
         noClickCount++;
+        updateNoButtonText();
         applySizes();
         positionNoButton();
       });
