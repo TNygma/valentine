@@ -117,9 +117,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 1rem;
+      gap: 2.5rem;
       min-height: 80px;
-      min-width: 260px;
+      min-width: 280px;
+    }
+
+    .buttons-no-spacer {
+      flex-shrink: 0;
+      visibility: hidden;
+      pointer-events: none;
     }
 
     .btn {
@@ -292,7 +298,6 @@
       const askWrap = document.getElementById('askWrap');
       const yayWrap = document.getElementById('yayWrap');
 
-      const YES_BASE_SCALE = 1;
       let noClickCount = 0;
       let directionIndex = 0;
 
@@ -330,8 +335,39 @@
         );
       }
 
+      function clampOffsetToViewport(offX, offY, noWidth, noHeight) {
+        const wrapRect = buttonsWrap.getBoundingClientRect();
+        const centerX = wrapRect.left + wrapRect.width / 2;
+        const centerY = wrapRect.top + wrapRect.height / 2;
+        const noLeftVp = centerX + offX - noWidth / 2;
+        const noTopVp = centerY + offY - noHeight / 2;
+        const noRightVp = noLeftVp + noWidth;
+        const noBottomVp = noTopVp + noHeight;
+        const pad = 8;
+        let dx = offX;
+        let dy = offY;
+        if (noLeftVp < pad) dx = offX + (pad - noLeftVp);
+        if (noRightVp > window.innerWidth - pad) dx = offX - (noRightVp - (window.innerWidth - pad));
+        if (noTopVp < pad) dy = offY + (pad - noTopVp);
+        if (noBottomVp > window.innerHeight - pad) dy = offY - (noBottomVp - (window.innerHeight - pad));
+        return { x: dx, y: dy };
+      }
+
+      function ensureNoSpacer() {
+        let spacer = buttonsWrap.querySelector('.buttons-no-spacer');
+        if (!spacer) {
+          spacer = document.createElement('span');
+          spacer.className = 'buttons-no-spacer';
+          spacer.setAttribute('aria-hidden', 'true');
+          btnYes.after(spacer);
+        }
+        spacer.style.width = btnNo.offsetWidth + 'px';
+        spacer.style.height = btnNo.offsetHeight + 'px';
+      }
+
       function positionNoButton() {
         btnNo.classList.add('running');
+        ensureNoSpacer();
         const wrapRect = buttonsWrap.getBoundingClientRect();
         const yesRect = getRect(btnYes);
         const noWidth = btnNo.offsetWidth;
@@ -340,7 +376,8 @@
         let bestDy = 0;
 
         for (let i = 0; i < 50; i++) {
-          const off = getRandomOffset();
+          let off = getRandomOffset();
+          off = clampOffsetToViewport(off.x, off.y, noWidth, noHeight);
           const noLeft = wrapRect.width / 2 + off.x - noWidth / 2;
           const noTop = wrapRect.height / 2 + off.y - noHeight / 2;
           const proposed = {
@@ -358,13 +395,26 @@
           bestDy = off.y;
         }
 
-        btnNo.style.setProperty('--no-dx', bestDx + 'px');
-        btnNo.style.setProperty('--no-dy', bestDy + 'px');
+        const clamped = clampOffsetToViewport(bestDx, bestDy, noWidth, noHeight);
+        btnNo.style.setProperty('--no-dx', clamped.x + 'px');
+        btnNo.style.setProperty('--no-dy', clamped.y + 'px');
+      }
+
+      // YES growth: configurable curve (no growth first 2 clicks, then diminishing returns)
+      const YES_GROWTH_START_AFTER_CLICKS = 2;
+      const YES_GROWTH_NEAR_FULL_AT_CLICKS = 10;
+      const YES_MAX_SCALE = 12;
+      const YES_GROWTH_EASE_FACTOR = 3;
+
+      function getYesScale() {
+        if (noClickCount < YES_GROWTH_START_AFTER_CLICKS) return 1;
+        const progress = Math.min(1, (noClickCount - YES_GROWTH_START_AFTER_CLICKS) / (YES_GROWTH_NEAR_FULL_AT_CLICKS - YES_GROWTH_START_AFTER_CLICKS));
+        const ease = 1 - Math.exp(-YES_GROWTH_EASE_FACTOR * progress);
+        return 1 + (YES_MAX_SCALE - 1) * ease;
       }
 
       function applySizes() {
-        var yesScale = YES_BASE_SCALE * Math.pow(1.3, noClickCount);
-        yesScale = Math.min(yesScale, 15);
+        const yesScale = getYesScale();
         btnYes.style.setProperty('--yes-scale', String(yesScale));
         btnYes.classList.toggle('green', noClickCount >= 5);
       }
